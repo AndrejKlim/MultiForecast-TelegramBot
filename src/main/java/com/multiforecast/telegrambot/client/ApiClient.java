@@ -20,7 +20,7 @@ public class ApiClient {
 
     public Optional<String> getForecast(Long userId) {
 
-        var url = "http://localhost:9095/forecast?userId={userId}";
+        var url = "http://apiRouter:9095/forecast?userId={userId}";
         var entity = HttpEntity.EMPTY;
         var params = Map.of("userId", userId);
 
