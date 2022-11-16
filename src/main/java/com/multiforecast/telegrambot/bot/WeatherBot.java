@@ -114,10 +114,7 @@ public class WeatherBot extends AbilityBot {
 
     private void getForecast(final Update update) {
         botService.getForecast(update).stream()
-                .map(s -> {
-                    //                    sendMessage.setParseMode(MARKDOWN);
-                    return new SendMessage(getChatId(update), s);
-                })
+                .map(s -> new SendMessage(getChatId(update), s))
                 .forEach(message -> silent.execute(message));
     }
 

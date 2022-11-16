@@ -1,0 +1,19 @@
+app:
+  client:
+    router:
+      url:
+        forecastByUserId: 'http://localhost:9095/forecast?userId={userId}'
+        saveLocation:  'http://localhost:9095/location'
+  bot:
+    response:
+      userNotFoundMessage: Пользователь не найден. Пришлите свою геолокацию
+    username: MultiForecast
+    token: '5627094481:AAGQKNpDr6vj0DoafGC-LQ1N_M2We-WoJHg'
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestTemplate: DEBUG
