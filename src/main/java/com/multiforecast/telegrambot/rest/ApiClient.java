@@ -1,9 +1,11 @@
 package com.multiforecast.telegrambot.rest;
 
+import com.multiforecast.telegrambot.rest.model.Forecast;
 import com.multiforecast.telegrambot.rest.model.LocationSaveRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,10 @@ public class ApiClient {
         var params = Map.of("userId", userId);
 
         log.info("Get Forecast info. Request entity = {}\n params = {}", entity, params);
-        String forecast = null;
+        Optional<String> result = Optional.empty();
         try {
-            forecast = restTemplate.exchange(forecastByUserIdUrl, HttpMethod.GET, entity, String.class, params).getBody();
+            Forecast forecast = restTemplate.exchange(forecastByUserIdUrl, HttpMethod.GET, entity, new ParameterizedTypeReference<Forecast>() {}, params).getBody();
+            result = forecast != null ? Optional.ofNullable(forecast.forecast()) : Optional.empty();
         } catch (HttpClientErrorException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode().value()) {
                 log.error("User not found, reason = ");
@@ -43,7 +46,7 @@ public class ApiClient {
             log.error("Error during retrieving forecast", e);
         }
 
-        return Optional.ofNullable(forecast);
+        return result;
     }
 
     public void saveLocation(final LocationSaveRequest locationSaveRequest) {
